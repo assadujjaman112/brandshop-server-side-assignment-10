@@ -29,6 +29,8 @@ async function run() {
     await client.connect();
 
     const brandCollection = client.db("brandDB").collection("brand")
+    const myCollection = client.db("productDB").collection("product")
+
 
 
     app.get("/products", async(req, res) => {
@@ -42,12 +44,24 @@ async function run() {
       const result = await brandCollection.findOne(query);
       res.send(result);
     })
+    app.get("/myCollection", async(req, res) => {
+      const cursor = myCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+
+    })
     app.post("/products", async(req, res) => {
         const newProduct = req.body;
         console.log(newProduct);
         const result = await brandCollection.insertOne(newProduct);
         res.send(result);
 
+    })
+    app.post("/myCollection", async(req, res) => {
+      const myProduct = req.body;
+      console.log(myProduct)
+      const result = await myCollection.insertOne(myProduct);
+      res.send(result);
     })
     app.put("/products/:id",async(req, res) => {
       const id = req.params.id;
@@ -65,6 +79,13 @@ async function run() {
         }
       }
       const result = await brandCollection.updateOne(filter, product, options);
+      res.send(result);
+    })
+
+    app.delete("/myCollection/:id", async(req, res) => {
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)};
+      const result = await myCollection.deleteOne(query);
       res.send(result);
     })
 
