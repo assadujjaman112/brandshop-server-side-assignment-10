@@ -75,7 +75,8 @@ async function run() {
           brand :updatedProduct.brand, 
           type :updatedProduct.type, 
           price :updatedProduct.price, 
-          rating :updatedProduct.rating
+          rating :updatedProduct.rating,
+          email : updatedProduct.email
         }
       }
       const result = await brandCollection.updateOne(filter, product, options);
